@@ -13,6 +13,10 @@
 
 'use strict';
 
+// Service has limited quota, adding max results and page size to keep in the limit.
+const PAGE_SIZE = 5;
+const MAX_RESULTS = 10;
+
 async function main(projectId, location) {
   // [START nodejs_contact_center_insights_quickstart]
   // Imports the Google Cloud client library
@@ -29,8 +33,14 @@ async function main(projectId, location) {
   //TODO(library generator): write the actual function you will be testing
   async function listConversations() {
     const conversations = await client.listConversations({
-      parent: `projects/${projectId}/locations/${location}`,
-    });
+        parent: `projects/${projectId}/locations/${location}`,
+        pageSize: PAGE_SIZE,
+      },
+      {
+        autopaginate: false,
+        maxResults: MAX_RESULTS,
+      },
+    );
     console.info(conversations);
   }
   listConversations();
